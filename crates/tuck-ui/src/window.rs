@@ -278,6 +278,14 @@ impl WindowSpec {
         matches!(self.kind, WindowKind::Panel { .. })
     }
 
+    fn is_topmost(&self) -> bool {
+        match self.kind {
+            WindowKind::Overlay { .. } | WindowKind::Panel { .. } => true,
+            WindowKind::Popup { topmost, .. } => topmost,
+            WindowKind::Normal { .. } => false,
+        }
+    }
+
     fn click_through_enabled(&self) -> bool {
         matches!(self.kind, WindowKind::Popup { click_through: true, .. })
     }
@@ -732,6 +740,7 @@ fn try_render(app: &App, win: &Rc<WindowState>, time: f64) -> Result<()> {
 fn show(win: &WindowState, activate: bool) {
     win.hidden.set(false);
     let hwnd = win.hwnd();
+    raise_if_topmost(win);
     // SAFETY: plain calls on our own window.
     unsafe {
         if activate {
@@ -743,6 +752,14 @@ fn show(win: &WindowState, activate: bool) {
     }
     if win.spec.is_panel() {
         win::activate_frame(win.hwnd.get());
+    }
+}
+
+/// A hidden topmost window keeps its old place in the topmost band, so every other always-on-top window raised since
+/// would cover it; move it to the front of the band on each show.
+fn raise_if_topmost(win: &WindowState) {
+    if win.spec.is_topmost() {
+        win::set_topmost(win.hwnd.get(), true);
     }
 }
 
@@ -842,8 +859,11 @@ fn apply_op(app: &App, win: &Rc<WindowState>, op: WindowOp) {
                 if win.hidden.get() {
                     win.show_pending.set(Some(activate));
                     app.request_frame(win);
-                } else if activate {
-                    win::force_foreground(raw);
+                } else {
+                    raise_if_topmost(win);
+                    if activate {
+                        win::force_foreground(raw);
+                    }
                 }
             }
             WindowOp::Hide => {
