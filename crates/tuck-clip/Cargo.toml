@@ -1,0 +1,13 @@
+[package]
+name = "tuck-clip"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[dependencies]
+tuck-core.workspace = true
+anyhow.workspace = true
+log.workspace = true
+image.workspace = true
+windows.workspace = true
+windows-core.workspace = true
+windows-collections.workspace = true

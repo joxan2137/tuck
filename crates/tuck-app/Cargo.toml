@@ -1,0 +1,31 @@
+[package]
+name = "tuck-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+build = "build.rs"
+
+[lib]
+name = "tuck_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "tuck"
+path = "src/main.rs"
+
+[dependencies]
+tuck-core.workspace = true
+tuck-ui.workspace = true
+tuck-sys.workspace = true
+tuck-clip.workspace = true
+tuck-store.workspace = true
+tuck-emoji.workspace = true
+tuck-panel.workspace = true
+anyhow.workspace = true
+log.workspace = true
+serde_json.workspace = true
+windows.workspace = true
+windows-core.workspace = true
+
+[build-dependencies]
+embed-resource.workspace = true

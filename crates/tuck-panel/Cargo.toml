@@ -1,0 +1,14 @@
+[package]
+name = "tuck-panel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[dependencies]
+tuck-core.workspace = true
+tuck-ui.workspace = true
+anyhow.workspace = true
+log.workspace = true
+unicode-segmentation.workspace = true
+
+[dev-dependencies]
+png.workspace = true

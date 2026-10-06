@@ -1,0 +1,19 @@
+[package]
+name = "tuck-ui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+tuck-core.workspace = true
+anyhow.workspace = true
+log.workspace = true
+windows-core.workspace = true
+windows-numerics.workspace = true
+icondata_lu.workspace = true
+icondata_core.workspace = true
+
+windows.workspace = true
+
+[dev-dependencies]
+png.workspace = true
